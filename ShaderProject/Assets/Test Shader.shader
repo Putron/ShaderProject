@@ -25,32 +25,33 @@ Shader "Custom/Test Shader"
 
             struct Attributes
             {
-                float3 positionOS : POSITION;
+                float4 positionOS : POSITION;
+                half3 normal : NORMAL;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                float3 positionWS : TEXCOORD0;
+                half3 normal : TEXCOORD0;
             };
-
-            float4 _Color;
 
 
             Varyings Vert(const Attributes input)
             {
                 Varyings output;
 
-                output.positionHCS = TransformObjectToHClip(input.positionOS);
-                output.positionWS = TransformObjectToWorld(input.positionOS);
+                output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.normal = TransformObjectToWorldNormal(input.normal);
 
                 return output;
             }
 
 
-            half4 Frag(const Varyings input) : SV_TARGET
+            half4 Frag(Varyings input) : SV_TARGET
             {
-                return _Color;
+                half4 color = 0;
+                color.rgb = input.normal * 0.7 + 0.7;
+                return color;
             }
 
             ENDHLSL
