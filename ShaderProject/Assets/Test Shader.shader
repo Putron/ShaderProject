@@ -40,7 +40,8 @@ Shader "Custom/Test Shader"
             {
                 Varyings output;
 
-                output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.positionHCS = mul(UNITY_MATRIX_P, mul(UNITY_MATRIX_V, mul(UNITY_MATRIX_M, float4(input.positionOS)))); 
+               // output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
                 output.normal = TransformObjectToWorldNormal(input.normal);
 
                 return output;
